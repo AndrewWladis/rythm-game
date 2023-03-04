@@ -1,10 +1,9 @@
-//have an array of songs
-//also play audio
 const song = [0.75, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.75, 0.7, 0.7, 0.7, 1, 0.7, 0.7, 0.7, 0.7, 0.7, 1, 1, 1, 0.75, 0.75, 1, 0.75, 0.75, 0.7, 1, 1, 1, 1, 0.75, 0.7, 0.75, 0.7, 0.7, 0.7, 1];
-//32 seconds
 const left = document.getElementById('left');
 const right = document.getElementById('right');
-const scoreHeader = document.querySelector('.score');
+const leftScoreHeader = document.querySelectorAll('.score')[0];
+const rightScoreHeader = document.querySelectorAll('.score')[1];
+const darkRed = '#ff1a1a';
 let isLeftPlayerDead = true;
 let isRightPlayerDead = true;
 let hexString = "0123456789abcdef";
@@ -90,6 +89,12 @@ function startGame() {
         }, newArr.reduce((partialSum, a) => partialSum + a, 0) * 1000);
         newArr.push(songArr[i]);
     }
+    setTimeout(() => {
+        leftScoreHeader.style.boxShadow = `0 0 60px 30px ${darkRed}, 0 0 100px 60px ${darkRed}`;
+        rightScoreHeader.style.boxShadow = `0 0 60px 30px ${darkRed}, 0 0 100px 60px ${darkRed}`;
+        leftScoreHeader.style.background = darkRed;
+        rightScoreHeader.style.background = darkRed;
+    }, 32000)
 }
 
 let countdown = document.createElement('h1');
