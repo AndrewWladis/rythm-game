@@ -1,7 +1,7 @@
 //have an array of songs
 //also play audio
-const song = [0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75]
-//above is the time for each beat
+const song = [0.75, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.75, 0.7, 0.7, 0.7, 1, 0.7, 0.7, 0.7, 0.7, 0.7, 1, 1, 1, 0.75, 0.75, 1, 0.75, 0.75, 0.7, 1, 1, 1, 1, 0.75, 0.7, 0.75, 0.7, 0.7, 0.7, 1];
+//32 seconds
 const left = document.getElementById('left');
 const right = document.getElementById('right');
 const scoreHeader = document.querySelector('.score');
@@ -10,6 +10,22 @@ let isRightPlayerDead = true;
 let hexString = "0123456789abcdef";
 let leftScore = 0;
 let rightScore = 0;
+
+
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+}
+
+function randomSong() {
+    let songArray = ['songs/sweetdreams.mp3', 'songs/sigma.mp3', 'songs/justthetwo.mp3']
+    return songArray[Math.floor(Math.random() * 3)]
+}
 
 function randomColor() {
     let hexCode = "#";
@@ -41,6 +57,8 @@ function removeAndAddToScore(side, path) {
     let locationDiv = document.getElementById(side);
     let location = locationDiv.getElementsByTagName('div')[1].getElementsByTagName('div')[path];
     if (location.children.length > 0) {
+        var click = new Audio('songs/click.wav');
+        click.play();
         side === 'left' ? leftScore++ : rightScore++;
         let sideScore = side === 'left' ? leftScore : rightScore;
         location.removeChild(location.children[0]);
@@ -49,14 +67,16 @@ function removeAndAddToScore(side, path) {
 }
 
 function startGame() {
+    var songAudio = new Audio(randomSong());
+    songAudio.play();
     let newArr = [];
+    let songArr = shuffle(song);
     leftScore = 0;
     rightScore = 0;
     isLeftPlayerDead = false;
     isRightPlayerDead = false;
-    for (let i = 0; i < song.length; i++) {
+    for (let i = 0; i < songArr.length; i++) {
         let randomPath = Math.floor(Math.random() * 3);
-        console.log(randomPath)
         setTimeout(() => {
             if (!isLeftPlayerDead) {
                 let newTile = createTile();
@@ -68,7 +88,7 @@ function startGame() {
             }
             
         }, newArr.reduce((partialSum, a) => partialSum + a, 0) * 1000);
-        newArr.push(song[i]);
+        newArr.push(songArr[i]);
     }
 }
 
@@ -93,6 +113,7 @@ setTimeout(() => {
 
 window.onkeypress = function (e) {
     e = e || window.event;
+    e.preventDefault();
     if (!isLeftPlayerDead) {
         if (e.key === 'a') {
             removeAndAddToScore('left', 0);

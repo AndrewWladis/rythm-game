@@ -67,7 +67,7 @@
 .tile {
     position: absolute;
     width: 16.67%;
-    height: 22vh;
+    height: 25vh;
     animation: tileanimation 1s;
 }
 
